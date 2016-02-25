@@ -3,7 +3,7 @@ import _mssql
 class ticketStatus():
 
     def checkTicketNumber(ticketNumber):
-        conn = _mssql.connect(server='192.168.0.25\SQLEXPRESS', user='sa', password='lozinka', \
+        conn = _mssql.connect(server='192.168.0.25:4910', user='sa', password='lozinka', \
                           database='eGate15Sql')
         sqlcmd = """
             DECLARE
