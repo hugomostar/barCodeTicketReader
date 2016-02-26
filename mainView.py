@@ -36,7 +36,7 @@ class Ui_ticketReaderView(object):
 
         self.centralWidget = QtGui.QWidget(ticketReaderView)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
-        self.centralWidget.setStyleSheet("background-color: #0000FF");
+        self.centralWidget.setStyleSheet("background-color: #00A3E8");
         self.verticalLayoutWidget = QtGui.QWidget(self.centralWidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(-10, 0, 502, 271))
         self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
