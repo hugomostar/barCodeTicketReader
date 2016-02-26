@@ -36,6 +36,7 @@ class Ui_ticketReaderView(object):
 
         self.centralWidget = QtGui.QWidget(ticketReaderView)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
+        self.centralWidget.setStyleSheet("background-color: #0000FF");
         self.verticalLayoutWidget = QtGui.QWidget(self.centralWidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(-10, 0, 502, 271))
         self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
@@ -46,7 +47,6 @@ class Ui_ticketReaderView(object):
 
         self.textEdit = QtGui.QTextEdit(self.verticalLayoutWidget)
         self.textEdit.setFrameStyle(0)
-        #self.textEdit.setHorizontalScrollBar(0)
         self.textEdit.setEnabled(False)
         self.textEdit.setMinimumSize(QtCore.QSize(500, 90))
         self.textEdit.setMaximumSize(QtCore.QSize(500, 90))
@@ -90,4 +90,4 @@ class Ui_ticketReaderView(object):
                                             "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
                                             "p, li { white-space: pre-wrap; }\n"
                                             "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:15px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#eeeeee;\"><span style=\" font-family:\'Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif\'; font-size:28pt; font-weight:600; color:#3117c7; background-color:#eeeeee;\">Molimo nanesite <br /> vaš tiket<br /> </span></p></body></html>", None))
+                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:15px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#0000FF;\"><span style=\" font-family:\'Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif\'; font-size:28pt; font-weight:600; color:#ffffff; background-color:#0000FF;\">Molimo nanesite <br /> vaš tiket<br /> </span></p></body></html>", None))
