@@ -33,8 +33,8 @@ class Ui_ticketReaderView(object):
         ticketReaderView.setSizePolicy(sizePolicy)
         ticketReaderView.setMaximumSize(QtCore.QSize(480, 320))
         ticketReaderView.setAutoFillBackground(False)
-
         self.centralWidget = QtGui.QWidget(ticketReaderView)
+
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.centralWidget.setStyleSheet("background-color: #00A3E8");
         self.verticalLayoutWidget = QtGui.QWidget(self.centralWidget)
@@ -46,6 +46,7 @@ class Ui_ticketReaderView(object):
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
 
         self.textEdit = QtGui.QTextEdit(self.verticalLayoutWidget)
+        self.textEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.textEdit.setFrameStyle(0)
         self.textEdit.setEnabled(False)
         self.textEdit.setMinimumSize(QtCore.QSize(500, 90))
@@ -90,4 +91,4 @@ class Ui_ticketReaderView(object):
                                             "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
                                             "p, li { white-space: pre-wrap; }\n"
                                             "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:15px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#00A3E8;\"><span style=\" font-family:\'Calibri\'; font-size:28pt; font-weight:600; color:#ffffff; background-color:#00A3E8;\">Molimo nanesite <br /> vaš tiket<br /> </span></p></body></html>", None))
+                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:15px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#00A3E8;\"><span style=\" font-family:\'Calibri\'; font-size:28pt; font-weight:600; color:#ffffff; background-color:#00A3E8;\">Molimo nanesite <br /> Vaš tiket<br /> </span></p></body></html>", None))
