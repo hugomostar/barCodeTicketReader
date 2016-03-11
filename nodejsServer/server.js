@@ -5,20 +5,22 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var Ticket     = require('./app/models/ticket');
 var fs = require('fs');
+var timediff = require('timediff');
+var config = require('./config');
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(config.db);
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;        // set our port
+var port = config.httpPort       // set our port
 
 https.createServer({
       key: fs.readFileSync('key.pem'),
       cert: fs.readFileSync('cert.pem')
-    }, app).listen(55555);
+    }, app).listen(config.httpsPort);
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -53,7 +55,7 @@ router.route('/tickets')
 			ticket.ValidForExitUntil = req.body.ValidForExitUntil;
 			ticket.ValidForEntryUntil = req.body.ValidForEntryUntil;
 			ticket.CreatedTime = req.body.CreatedTime;
-			ticket.UpdatedTime 
+			ticket.UpdatedTime = req.body.UpdatedTime;
         // save the ticket and check for errors
         ticket.save(function(err) {
             if (err)
@@ -77,13 +79,43 @@ router.route('/tickets')
 
     // get the ticket with that id (accessed at GET http://localhost:8080/api/tickets/:ticket_number)
     .get(function(req, res) {
-        Ticket.findOne({TicketNumber : req.params.ticket_number}, function(err, ticket) {
+        Ticket.findOne({TicketNumber : req.params.ticket_number}, function(err, ticket) {			
             if (err)
                 res.send(err);
-			if(ticket)
-				res.json({"response": "true",});
+			
+			if(!ticket) // check if ticket exists 
+				res.json({ "validationSuccess": "error",  "validationMessage": "Tiket ne postoji!" });
 			else
-				res.json({"response": "false",});
+			{
+				if(ticket.IsClosed == true) // check is ticket closed
+					res.json({ "validationSuccess": "error",  "validationMessage": "Tiket nije validan!" });	
+				else
+				{
+					var now = new Date(); // get current timestamp
+					now.setHours(now.getHours() - now.getTimezoneOffset() / 60); // set to local time
+					now = now.toISOString(); // convert to JSON
+					var diffJSON = timediff(ticket.EnterTime, now, 'm'); // get difference between Ticket EnterTime and current time
+					var diff = diffJSON['minutes'] // get integer value
+				}
+			
+				if(diff>config.createdTimeLimit) // check is ticket older from time set in config file
+					res.json({ "validationSuccess": "error",  "validationMessage": "Tiket nije plaćen!" });	
+					
+			}
+			// if everything passess update ticket ValidForExitUntil for value in config file and send positive response
+			var now = new Date();
+			now.setMinutes(now.getMinutes() + config.extendExitTime);
+			now.setHours(now.getHours() - now.getTimezoneOffset() / 60);
+			now = now.toISOString();
+			ticket.ValidForExitUntil = now; // update ticket exit time
+
+			// save the ticket
+			ticket.save(function(err) {
+				if (err)
+					res.send(err);
+			});
+			
+			res.json({ "validationSuccess": "ok",  "validationMessage": "Uspješna validacija!" }); 
         });
     })
 	
