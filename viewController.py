@@ -26,7 +26,7 @@ class MyForm(QtGui.QMainWindow):
 
         self.ui.mainToolBar.hide()
 
-        self.showFullScreen()
+        #self.showFullScreen()
 		
     def keyPressEvent(self, event):
          key = event.key()
@@ -35,7 +35,8 @@ class MyForm(QtGui.QMainWindow):
              print('pressed: ', chr(key))
          if key == QtCore.Qt.Key_Return:
             print('Ticket:', self.ticketNumber)
-            self.checkIsTicketValid()
+            if(len(self.ticketNumber)>0):
+                self.checkIsTicketValid()
             self.timer.start(3000)
             self.ticketNumber = ''
 
@@ -49,7 +50,7 @@ class MyForm(QtGui.QMainWindow):
 
     def checkIsTicketValid(self):
         self.status = ticketStatus.checkTicketNumber(self.ticketNumber)
-        if self.status == 'OK!':
+        if self.status == 'true':
             self.ui.textEdit.setHtml(_translate("ticketReaderView", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                                                 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
                                                 "p, li { white-space: pre-wrap; }\n"

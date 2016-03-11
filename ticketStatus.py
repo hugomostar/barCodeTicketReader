@@ -1,21 +1,11 @@
-import _mssql
-
+import requests
+import json
 class ticketStatus():
 
     def checkTicketNumber(ticketNumber):
-        conn = _mssql.connect(server='192.168.0.25:49170', user='sa', password='lozinka', \
-                          database='eGate15Sql')
-        sqlcmd = """
-            DECLARE
-                @res varchar(5),
-                @ticketNumber varchar(13) = %s
 
-            EXEC
-                [dbo].[sp_setTicketNumberToValidForExit]
-                @res = @res OUTPUT,
-                @ticketNumber = @ticketNumber
-            SELECT @res
-            """
+        r = requests.get('http://localhost:8080/api/tickets/'+ticketNumber)
+        data = json.loads(r.text)
+        res = data['response']
 
-        res = conn.execute_scalar(sqlcmd, ticketNumber)
         return res
