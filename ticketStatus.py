@@ -16,10 +16,8 @@ class ticketStatus():
 
         r = requests.get(config['ExpressJS']['getRequest']+ticketNumber)
         data = json.loads(r.text)
-        print(data)
-        res = data['response']
 
-        return res
+        return data
 
     def checkTicketNumberSql(ticketNumber):
 
@@ -27,7 +25,7 @@ class ticketStatus():
                           password=config['SQL']['password'], database='eGate15Sql')
         sqlcmd = """
             DECLARE
-                @res varchar,
+                @res varchar(150),
                 @ticketNumber varchar(13) = %s
             EXEC
                 [dbo].[sp_setTicketNumberToValidForExit]
@@ -37,4 +35,6 @@ class ticketStatus():
             """
 
         res = conn.execute_scalar(sqlcmd, ticketNumber)
-        return res
+        data = json.loads(res)
+
+        return data

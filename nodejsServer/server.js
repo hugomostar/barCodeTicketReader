@@ -11,7 +11,7 @@ var config = require('./config');
 mongoose.connect(config.db);
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-
+1411150100035
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -79,12 +79,13 @@ router.route('/tickets')
 
     // get the ticket with that id (accessed at GET http://localhost:8080/api/tickets/:ticket_number)
     .get(function(req, res) {
-        Ticket.findOne({TicketNumber : req.params.ticket_number}, function(err, ticket) {			
+		
+        Ticket.findOne({TicketNumber : req.params.ticket_number.substring(0,12), TicketControlNumber : req.params.ticket_number.substring(12)}, function(err, ticket) {			
             if (err)
                 res.send(err);
 			
 			if(!ticket) // check if ticket exists 
-				res.json({ "validationSuccess": "error",  "validationMessage": "Tiket ne postoji!" });
+				res.json({ "validationSuccess": "error",  "validationMessage": "Dogodila se pogreska! <br /> Pokusajte ponovo!" });
 			else
 			{
 				if(ticket.IsClosed == true) // check is ticket closed
@@ -99,37 +100,50 @@ router.route('/tickets')
 				}
 			
 				if(diff>config.createdTimeLimit) // check is ticket older from time set in config file
-					res.json({ "validationSuccess": "error",  "validationMessage": "Tiket nije plaćen!" });	
-					
-			}
-			// if everything passess update ticket ValidForExitUntil for value in config file and send positive response
-			var now = new Date();
-			now.setMinutes(now.getMinutes() + config.extendExitTime);
-			now.setHours(now.getHours() - now.getTimezoneOffset() / 60);
-			now = now.toISOString();
-			ticket.ValidForExitUntil = now; // update ticket exit time
+					res.json({ "validationSuccess": "error",  "validationMessage": "Tiket nije placen!" });	
+				else
+				{
+					// if everything passess update ticket ValidForExitUntil for value in config file and send positive response
+					var now = new Date();
+					now.setMinutes(now.getMinutes() + config.extendExitTime);
+					now.setHours(now.getHours() - now.getTimezoneOffset() / 60);
+					now = now.toISOString();
+					ticket.ValidForExitUntil = now; // update ticket exit time
 
-			// save the ticket
-			ticket.save(function(err) {
-				if (err)
-					res.send(err);
+					// save the ticket
+					ticket.save(function(err) {
+						if (err)
+							res.send(err);
 			});
-			
-			res.json({ "validationSuccess": "ok",  "validationMessage": "Uspješna validacija!" }); 
+			res.json({ "validationSuccess": "ok",  "validationMessage": "Vas tiket je validiran <br /> za izlaz!" }); 
+				}
+					
+			}			
         });
     })
 	
 	.put(function(req, res) {
 
         // use our ticket model to find the ticket we want
-        Ticket.findOne({TicketNumber : req.params.ticket_number}, function(err, ticket) {
+        Ticket.findOne({TicketNumber : req.params.ticket_number.substring(0,12), TicketControlNumber : req.params.ticket_number.substring(12)}, function(err, ticket) {
 
             if (err)
                 res.send(err);
 			
 			if(ticket) {
-				ticket.ValidForExitUntil = req.body.ValidForExitUntil; // update ticket exit time
-
+				ticket.Id = req.body.Id;
+				ticket.TicketNumber = req.body.TicketNumber;
+				ticket.TicketControlNumber = req.body.TicketControlNumber;
+				ticket.EnterTime = req.body.EnterTime;
+				ticket.ExitTime = req.body.ExitTime;
+				ticket.Category = req.body.Category;
+				ticket.EnterTerminalId = req.body.EnterTerminalId;
+				ticket.ExitTerminalId = req.body.ExitTerminalId;
+				ticket.IsClosed = req.body.IsClosed;
+				ticket.ValidForExitUntil = req.body.ValidForExitUntil;
+				ticket.ValidForEntryUntil = req.body.ValidForEntryUntil;
+				ticket.CreatedTime = req.body.CreatedTime;
+				ticket.UpdatedTime = req.body.UpdatedTime;
 				// save the ticket
 				ticket.save(function(err) {
 					if (err)
